@@ -1,0 +1,209 @@
+<html>
+
+<head>
+    <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
+    <script src="d3-gauge.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {
+            'packages': ['gauge','corechart']
+//			'packages': ['gauge','line']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+		
+///////////////////// LINE ////////////////////////////////
+
+/*
+		var dataLine = new google.visualization.DataTable();
+		dataLine.addColumn('timeofday', 'Tiempo');
+		dataLine.addColumn('number', 'Voltaje');
+
+
+		dataLine.addRows([
+			[[8, 35, 45],  5.5],
+			[[8, 40, 00],  5.2],
+			[[8, 45, 15],  5],
+			[[8, 50, 30],  5.1],
+			[[8, 55, 45],  5.3]
+		]);
+	  
+	    var optionsLine = {
+			chart: {
+			  title: 'Box Office Earnings in First Two Weeks of Opening',
+			  subtitle: 'in millions of dollars (USD)'
+			},
+			width: 900,
+			height: 500,
+			axes: {
+			  x: {
+				0: {side: 'bottom'}
+			  }
+			}
+		};
+
+      var chartLine = new google.charts.Line(document.getElementById('curve_chart'));
+
+      chartLine.draw(dataLine, google.charts.Line.convertOptions(optionsLine));
+	*/  
+//	  var jsonData = JSON.parse('{ "cols": [{"id":"","label":"Tiempo","pattern":"","type":"timeofday"},{"id":"","label":"Voltaje","pattern":"","type":"number"}],"rows": [{"c":[{"v":[8, 35, 45]},{"v":3}]},{"c":[{"v":[9, 35, 45]},{"v":1}]},{"c":[{"v":[18, 35, 45]},{"v":0}]},{"c":[{"v":[19, 35, 45]},{"v":1}]},{"c":[{"v":[23, 35, 45]},{"v":2}]}]}');
+
+//	  var jsonData = JSON.parse('{ "cols": [{"id":"","label":"Tiempo","pattern":"","type":"datetime"},{"id":"","label":"Voltaje","pattern":"","type":"number"}],"rows": [{"c":[{"v":"Date(2020,05,05,08, 35, 45)"},{"v":"3"}]},{"c":[{"v":"Date(2020,5,5,9, 35, 45)"},{"v":"1"}]},{"c":[{"v":"Date(2020,05,06,18, 35, 45)"},{"v":"0"}]},{"c":[{"v":"Date(2020,05,07,19, 35, 45)"},{"v":"1"}]},{"c":[{"v":"Date(2020,05,07,23, 35, 45)"},{"v":"2"}]}]}');
+
+
+ 
+
+//		var dataLine2 = new google.visualization.DataTable(jsonData);
+
+/*			var dataLine = google.visualization.arrayToDataTable([
+					['timeofday', 'Voltaje'],
+					[[8, 35, 45],  5.5],
+					[[8, 40, 00],  5.2],
+					[[8, 45, 15],  5],
+					[[8, 50, 30],  5.1],
+										[[9, 40, 00],  5.2],
+					[[9, 45, 15],  5],
+					[[9, 50, 30],  5.1],
+										[[10, 40, 00],  5.2],
+					[[10, 45, 15],  5],
+					[[10, 50, 30],  5.1],
+										[[11, 40, 00],  5.2],
+					[[11, 45, 15],  5],
+					[[11, 50, 30],  5.1],
+										[[12, 40, 00],  5.2],
+					[[12, 45, 15],  5],
+					[[12, 50, 30],  5.1],
+										[[13, 40, 00],  1.2],
+					[[13, 45, 15],  0.5],
+					[[13, 50, 30],  0.12],
+										[[14, 40, 00],  5.2],
+					[[14, 45, 15],  5],
+					[[14, 50, 30],  5.1],
+										[[15, 40, 00],  5.2],
+					[[15, 45, 15],  5],
+					[[15, 50, 30],  5.1],
+										[[16, 40, 00],  5.2],
+					[[16, 45, 15],  5],
+					[[16, 50, 30],  5.1],
+										[[17, 40, 00],  5.2],
+					[[17, 45, 15],  5],
+					[[18, 50, 30],  5.1],
+
+					
+					[[18, 55, 45],  5.3]
+					]);
+*/
+			var optionsLine = {
+			  title: 'Voltaje',
+			  curveType: 'function',
+			  legend: { position: 'bottom' }
+			};
+
+			var chartLine = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+//			chartLine.draw(dataLine2, optionsLine);
+
+           setInterval(function() {
+                var xhttp = new XMLHttpRequest();
+                var datos = 0;
+  				xhttp.timeout = 2000; // tiempo en milisegundos
+				var accion = document.getElementById("rango").value;
+				var url = "http://192.168.1.49:8083/" + accion;
+				xhttp.onload = function () {
+				  // Solicitud finalizada. Haz el procesamiento aquí.
+					var jsonData = JSON.parse(this.responseText);
+					var dataLine2 = new google.visualization.DataTable(jsonData);
+					chartLine.draw(dataLine2, optionsLine);
+				};
+
+				xhttp.ontimeout = function (e) {
+				  // Tiempo de espera del XMLHttpRequest agotado. Haz algo aquí.
+				};
+                xhttp.open("GET", url, true);
+                xhttp.send();
+            }, 3000);
+
+
+
+/////////////// GAUGE ///////////////////////////
+
+            var data = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['Voltaje', 0]
+            ]);
+
+            var options = {
+                width: 720,
+                height: 400,
+                max: 7.5,
+                min: 0,
+                redFrom: 0,
+                redTo: 1.5,
+                yellowFrom: 1.5,
+                yellowTo: 4.5,
+                greenFrom: 4.5,
+                greenTo: 7.5,
+                minorTicks: 3,
+                majorTicks: [0, 1.5, 3.0, 4.5, 6.0, 7.5]
+            };
+
+            var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+
+            setInterval(function() {
+                var xhttp = new XMLHttpRequest();
+                var adc = 0;
+               /* xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        adc = Number(this.responseText);
+                        data.setValue(0, 1, adc);
+                        chart.draw(data, options);
+                    }
+                };*/
+				
+				xhttp.timeout = 2000; // tiempo en milisegundos
+
+				xhttp.onload = function () {
+				  // Solicitud finalizada. Haz el procesamiento aquí.
+					adc = Number(this.responseText);
+					data.setValue(0, 1, adc);
+					chart.draw(data, options);
+				};
+
+				xhttp.ontimeout = function (e) {
+				  // Tiempo de espera del XMLHttpRequest agotado. Haz algo aquí.
+					data.setValue(0, 1, 0);
+					chart.draw(data, options);
+				};
+                xhttp.open("GET", "http://192.168.1.241:32777/getADC", true);
+                xhttp.send();
+            }, 2000);
+
+        }
+    </script>
+</head>
+
+<body>
+    <div id="chart_div" style="width: 400px;height: 0;margin-left:20px;margin-top: 20px;"></div>
+	<div>
+		<div style="height: 50px;margin-left: 645px;">
+			Rango: 
+			<select id="rango" name="rango" value="findAllGoogleChartFormatLastHour" placeholder="rango"> 
+			<option value="findAllGoogleChartFormatLastHour">1 hora</option>
+			<option value="findAllGoogleChartFormatLast8Hour">8 horas</option>
+			<option value="findAllGoogleChartFormatLast12Hour">12 horas</option>
+			<option value="findAllGoogleChartFormatLast16Hour">16 horas</option>
+			<option value="findAllGoogleChartFormatLast24Hour">24 horas</option>
+			<option value="findAllGoogleChartFormatLast2Days">2 días</option>
+			<option value="findAllGoogleChartFormatLast3Days">3 días</option>
+			<option value="findAllGoogleChartFormatLast5Days">5 días</option>
+			<option value="findAllGoogleChartFormatLastWeek">1 semana</option>
+			<option value="findAllGoogleChartFormatLastMonth">1 mes</option>
+			</select>
+		</div>
+		<div id="curve_chart" style="width: 900px;height: 500px;margin-left: 520px;margin-top: -30px;"></div>
+	</div>
+</body>
+
+</html>
