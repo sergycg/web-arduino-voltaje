@@ -108,7 +108,7 @@
                 var datos = 0;
   				xhttp.timeout = 2000; // tiempo en milisegundos
 				var accion = document.getElementById("rango").value;
-				var url = "http://192.168.1.49:8083/" + accion;
+				var url = "http://pamyser.myqnapcloud.com:38090/api/arduino/voltaje/" + accion;
 				xhttp.onload = function () {
 				  // Solicitud finalizada. Haz el procesamiento aquí.
 					var jsonData = JSON.parse(this.responseText);
@@ -176,7 +176,7 @@
 					data.setValue(0, 1, 0);
 					chart.draw(data, options);
 				};
-                xhttp.open("GET", "http://192.168.1.241:32777/getADC", true);
+                xhttp.open("GET", "http://pamyser.myqnapcloud.com:32777/getADC", true);
                 xhttp.send();
             }, 2000);
 
