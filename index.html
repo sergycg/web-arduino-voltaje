@@ -111,7 +111,8 @@
 				var url = "http://pamyser.myqnapcloud.com:38090/api/arduino/voltaje/" + accion;
 				xhttp.onload = function () {
 				  // Solicitud finalizada. Haz el procesamiento aquí.
-					var jsonData = JSON.parse(this.responseText);
+					//var jsonData = JSON.parse(this.responseText);
+					var jsonData = JSON.parse('{"rows":[{"c":[{"v":"Date(2020-06-15 15:33:02)"},{"v":"5.09"}]},{"c":[{"v":"Date(2020-06-15 15:38:01)"},{"v":"5.10"}]}],"cols":[{"pattern":"","id":"","label":"Tiempo","type":"datetime"},{"pattern":"","id":"","label":"Voltaje","type":"number"}]}');
 					var dataLine2 = new google.visualization.DataTable(jsonData);
 					chartLine.draw(dataLine2, optionsLine);
 				};
