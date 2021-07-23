@@ -108,7 +108,7 @@
                 var datos = 0;
   				xhttp.timeout = 2000; // tiempo en milisegundos
 				var accion = document.getElementById("rango").value;
-				var url = "http://pamyser.myqnapcloud.com:38090/api/arduino/voltaje/" + accion;
+				var url = "https://zuul-server-heroku.herokuapp.com/api/arduino/voltaje/" + accion;
 				xhttp.onload = function () {
 				  // Solicitud finalizada. Haz el procesamiento aquí.
 					//var jsonData = JSON.parse(this.responseText);
